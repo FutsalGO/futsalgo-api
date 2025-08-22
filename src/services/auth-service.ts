@@ -1,5 +1,5 @@
 import bcrypt from "bcrypt";
-import prisma from "../prisma/client";
+import prisma from "@/prisma/client";
 
 export async function registerUser(
   name: string,

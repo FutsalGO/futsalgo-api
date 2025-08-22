@@ -1,20 +1,18 @@
 import { Request, Response } from "express";
-import { registerUser } from "../services/auth-service";
-import { registerSchema } from "../validations/auth-validation";
+import { registerUser } from "@/services/auth-service";
+import { registerSchema } from "@/validations/auth-validation";
 
 export const register = async (req: Request, res: Response) => {
   try {
     // validasi input
     const { error, value } = registerSchema.validate(req.body);
     if (error) {
-      return res
-        .status(400)
-        .json({
-          code: 400,
-          status: "error",
-          message: "Validation error",
-          errors: error.details[0]?.message,
-        });
+      return res.status(400).json({
+        code: 400,
+        status: "error",
+        message: "Validation error",
+        errors: error.details[0]?.message,
+      });
     }
 
     const { name, phone, email, password } = value;

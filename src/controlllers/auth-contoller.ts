@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-import bcrypt from "bcrypt";
-import prisma from "../prisma/client";
+import { registerUser } from "../services/auth-service";
 import { registerSchema } from "../validations/auth-validation";
 
 export const register = async (req: Request, res: Response) => {
@@ -12,20 +11,13 @@ export const register = async (req: Request, res: Response) => {
     }
 
     const { name, phone, email, password } = value;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    // simpan ke database
-    const user = await prisma.user.create({
-      data: {
-        name,
-        phone,
-        email,
-        password: hashedPassword,
-      },
-    });
+    const user = await registerUser(name, phone, email, password);
 
     return res.status(201).json({
+      code: 201,
+      status: "success",
       message: "User registered successfully",
-      user: {
+      data: {
         id: user.name,
         phone: user.phone,
         email: user.email,

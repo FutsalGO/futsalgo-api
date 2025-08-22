@@ -1,7 +1,7 @@
-import prisma from "../prisma/client";
+import prisma from "@/prisma/client";
 import bcrypt from "bcrypt";
-import { signToken } from "../utils/jwt";
-import { loginSchema } from "../validations/auth-validation";
+import { signToken } from "@/utils/jwt";
+import { loginSchema } from "@/validations/auth-validation";
 
 export const loginService = async (payload: { email: string; password: string }) => {
   const { error, value } = loginSchema.validate(payload);

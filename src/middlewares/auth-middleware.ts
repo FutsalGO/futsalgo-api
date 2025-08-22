@@ -1,5 +1,5 @@
 import { RequestHandler } from "express";
-import { verifyToken } from "../utils/jwt";
+import { verifyToken } from "@/utils/jwt";
 
 export const auth: RequestHandler = (req, res, next) => {
     try {

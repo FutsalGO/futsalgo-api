@@ -7,7 +7,14 @@ export const register = async (req: Request, res: Response) => {
     // validasi input
     const { error, value } = registerSchema.validate(req.body);
     if (error) {
-      return res.status(400).json({ message: error.details[0]?.message });
+      return res
+        .status(400)
+        .json({
+          code: 400,
+          status: "error",
+          message: "Validation error",
+          errors: error.details[0]?.message,
+        });
     }
 
     const { name, phone, email, password } = value;
@@ -26,6 +33,8 @@ export const register = async (req: Request, res: Response) => {
     });
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: "Internal server error" });
+    return res
+      .status(500)
+      .json({ code: 500, status: "error", message: "Internal server error" });
   }
 };

@@ -3,15 +3,14 @@ import dotenv from "dotenv";
 dotenv.config();
 
 // Middlewares
-import { cors } from "./middlewares/cors-middleware";
-import { errorHandler } from "./middlewares/error-handler-middleware";
+import { cors } from "@/middlewares/cors-middleware";
+import { errorHandler } from "@/middlewares/error-handler-middleware";
 
 // Routes
-import authRoutes from "./routes/auth-route";
+import authRoutes from "@/routes/auth-route";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 
 app.use(express.json());
 app.use(cors);

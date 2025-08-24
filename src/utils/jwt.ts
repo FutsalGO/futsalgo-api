@@ -1,17 +1,27 @@
-import jwt from 'jsonwebtoken';
-import dotenv from 'dotenv';
-dotenv.config();
+import dotenv from "dotenv";
+dotenv.config(); // WAJIB: load .env sebelum akses process.env
 
-const JWT_SECRET = process.env.JWT_SECRET;
+import jwt from "jsonwebtoken";
 
-if (!JWT_SECRET) {
-    throw new Error("JWT_SECRET is not defined in the environment variables");
+const JWT_SECRET = process.env.JWT_SECRET as string;
+
+export interface UserPayLoad {
+  id: number;
+  role?: string;
 }
 
-export const signToken = (payload: object) => {
-    return jwt.sign(payload, JWT_SECRET, {expiresIn: '1d'});
+export function signToken(payload: UserPayLoad) {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "1d" });
 }
 
-export const verifyToken = (token: string) => {
-    return jwt.verify(token, JWT_SECRET);
+export function verifyToken(token: string) {
+  return jwt.verify(token, JWT_SECRET) as UserPayLoad;
+}
+
+export function signResetToken(email: string) {
+  return jwt.sign({ email }, JWT_SECRET, { expiresIn: "15m" });
+}
+
+export function verifyResetToken(token: string): { email: string } {
+  return jwt.verify(token, JWT_SECRET) as { email: string };
 }

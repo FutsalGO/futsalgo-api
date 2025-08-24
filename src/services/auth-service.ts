@@ -3,7 +3,10 @@ import bcrypt from "bcrypt";
 import { signToken } from "@/utils/jwt";
 import { loginSchema } from "@/validations/auth-validation";
 
-export const loginUser = async (payload: { email: string; password: string }) => {
+export const loginUser = async (payload: {
+  email: string;
+  password: string;
+}) => {
   const { error, value } = loginSchema.validate(payload);
   if (error) throw { code: 400, message: error.message };
 
@@ -26,7 +29,7 @@ export async function registerUser(
   email: string,
   password: string
 ) {
-  // manual validation (mirip logic Joi)
+  // manual validation (seperti yang sudah ada)
   if (!name || name.length < 3 || name.length > 100) {
     throw new Error("Name must be between 3 and 100 characters");
   }
@@ -58,5 +61,8 @@ export async function registerUser(
     },
   });
 
-  return user;
+  // ✅ Generate token setelah register
+  const token = signToken(user);
+
+  return { user, token };
 }

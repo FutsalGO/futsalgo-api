@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
   output   = "../src/generated/prisma"
@@ -15,38 +9,38 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String
-  phone     String?
-  email     String    @unique
-  password  String
-  role      String    @default("user")
+  id         Int       @id @default(autoincrement())
+  name       String
+  phone      String?
+  email      String    @unique
+  password   String
+  role       String    @default("user")
   created_at DateTime  @default(now())
-  bookings  Booking[]
+  bookings   Booking[]
 }
 
 model Field {
   id            Int       @id @default(autoincrement())
   name          String
   description   String?
-  weekday_price  Decimal
-  weekend_price  Decimal
+  weekday_price Decimal
+  weekend_price Decimal
   imageUrl      String?
-  created_at     DateTime  @default(now())
+  created_at    DateTime  @default(now())
   bookings      Booking[]
 }
 
 model Booking {
-  id            Int       @id @default(autoincrement())
+  id             Int      @id @default(autoincrement())
   field_id       Int
   user_id        Int?
   customer_name  String
   customer_phone String
-  booking_date   DateTime  @db.Date
-  start_time     DateTime  @db.Time
-  end_time       DateTime  @db.Time
-  status        String    @default("pending") // pending, confirmed, cancelled, rejected
-  created_at     DateTime  @default(now())
+  booking_date   DateTime @db.Date
+  start_time     DateTime @db.Time
+  end_time       DateTime @db.Time
+  status         String   @default("pending") // pending, confirmed, cancelled, rejected
+  created_at     DateTime @default(now())
 
   field Field @relation(fields: [field_id], references: [id])
   user  User? @relation(fields: [user_id], references: [id])

@@ -1,28 +1,26 @@
-import { RequestHandler } from "express";
-import { verifyToken } from "@/utils/jwt";
+import { Request, Response, NextFunction } from "express";
+import { verifyToken } from "@/utils/jwt"; // pastikan ini mengembalikan payload token yang sudah didecode
 
-export const auth: RequestHandler = (req, res, next) => {
-    try {
-        const token = req.headers.authorization?.split(' ')[1] || req.cookies.token;
-        if (!token) {
-            res.status(401).json({
-                code: 401,
-                status: 'error',
-                message: 'Unauthorized',
-                data: null,
-            });
-            return;
-        };
+export function requireAuth(req: Request, res: Response, next: NextFunction) {
+  const token = req.cookies?.auth_token; // Ambil dari cookie, bukan header
 
-        const decoded = verifyToken(token);
-        (req as any).user = decoded;
-        next();
-    } catch {
-        res.status(401).json({
-            code: 401,
-            status: 'error',
-            message: 'Unauthorized',
-            data: null,
-        });
-    }
-};
+  if (!token) {
+    return res.status(401).json({
+      code: 401,
+      status: "unauthorized",
+      message: "Token tidak ditemukan. Silakan login terlebih dahulu.",
+    });
+  }
+
+  try {
+    const decoded = verifyToken(token);
+    (req as any).user = decoded;
+    next();
+  } catch (err) {
+    return res.status(401).json({
+      code: 401,
+      status: "unauthorized",
+      message: "Token tidak valid atau telah kedaluwarsa.",
+    });
+  }
+}

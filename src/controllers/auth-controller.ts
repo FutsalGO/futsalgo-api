@@ -1,25 +1,40 @@
-import { RequestHandler, Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import { loginUser, registerUser } from "@/services/auth-service";
 import { registerSchema } from "@/validations/auth-validation";
 
-export const login: RequestHandler = async (req, res, next) => {
+export async function handleLogin(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     const { token, user } = await loginUser(req.body);
+
+    res.cookie("auth_token", token, {
+      httpOnly: true, // agar tidak bisa diakses via JS (XSS protection)
+      secure: process.env.NODE_ENV === "production", // hanya dikirim via HTTPS di production
+      sameSite: "strict", // proteksi CSRF
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 hari
+    });
 
     res.status(200).json({
       code: 200,
       status: "success",
       message: "Login successful",
-      data: { token, user },
+      data: { user, token },
     });
   } catch (error) {
+    console.error(error);
     next(error);
   }
-};
+}
 
-export const register = async (req: Request, res: Response) => {
+export async function handleRegister(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    // validasi input
     const { error, value } = registerSchema.validate(req.body);
     if (error) {
       return res.status(400).json({
@@ -31,23 +46,54 @@ export const register = async (req: Request, res: Response) => {
     }
 
     const { name, phone, email, password } = value;
-    const user = await registerUser(name, phone, email, password);
+    const { user, token } = await registerUser(name, phone, email, password);
+
+    // ✅ Simpan token di cookie
+    res.cookie("auth_token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 hari
+    });
 
     return res.status(201).json({
       code: 201,
       status: "success",
       message: "User registered successfully",
       data: {
-        id: user.name,
+        id: user.id,
+        name: user.name,
         phone: user.phone,
         email: user.email,
-        password: user.password,
+        token,
       },
     });
-  } catch (err) {
-    console.error(err);
-    return res
-      .status(500)
-      .json({ code: 500, status: "error", message: "Internal server error" });
+  } catch (error) {
+    console.error(error);
+    next(error);
   }
-};
+}
+
+export async function handleLogout(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    // Hapus cookie auth_token
+    res.clearCookie("auth_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({
+      code: 200,
+      status: "success",
+      message: "Logout successful",
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}

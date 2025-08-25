@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import corsMiddleware from "@/middlewares/cors-middleware";
 import { errorHandler } from "@/middlewares/error-handler-middleware";
 import authRoutes from "@/routes/auth-route";
+import userBookingRoutes from "@/routes/user/booking-route";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use(corsMiddleware);
 
 app.use("/auth", authRoutes);
+app.use("/bookings/user", userBookingRoutes);
 
 app.use(errorHandler);
 

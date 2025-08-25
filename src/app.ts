@@ -15,8 +15,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(corsMiddleware);
 
-app.use("/api/auth", authRoutes);
-app.use("/api/bookings/user", userBookingRoutes);
+app.use("/auth", authRoutes);
+app.use("/bookings/user", userBookingRoutes);
 
 app.use(errorHandler);
 

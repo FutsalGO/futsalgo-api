@@ -1,4 +1,4 @@
-import c from 'cors';
+import cors from 'cors';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -8,7 +8,9 @@ if (CORS_ORIGINS.length === 0) {
     throw new Error("CORS_ORIGINS is not defined in the environment variables");
 }
 
-export const cors = c({
+export const corsMiddleware = cors({
     origin: CORS_ORIGINS,
     credentials: true
 });
+
+export default corsMiddleware;

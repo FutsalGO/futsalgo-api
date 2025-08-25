@@ -69,7 +69,7 @@ export async function handleDelete(
       code: 200,
       status: "success",
       message: "Booking deleted successfully",
-      data: deleted_booking,
+      data: null,
     });
   } catch (error) {
     console.error(error);

@@ -27,6 +27,9 @@ export async function getBookings(filters: BookingFilters)  {
                 user_id: filters.user_id,
                 ...(filters.date ? { booking_date: new Date(filters.date).toISOString() } : {}),
                 ...(filters.status ? { status: filters.status } : {}),
+                NOT: {
+                    status: 'cancelled'
+                }
             },
             take: Number(filters.limit) || 10,
             skip: Number(filters.offset) || 0,

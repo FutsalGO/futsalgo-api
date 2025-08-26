@@ -23,5 +23,5 @@ export const createBookingSchema = Joi.object({
 
 export const updateBookingSchema = Joi.object({
     booking_id: Joi.number().integer().required(),
-    status: Joi.string().valid('pending', 'confirmed', 'cancelled', 'rejected').required(),
+    status: Joi.string().valid('pending', 'confirmed', 'cancelled', 'rejected', 'completed').required(),
 });

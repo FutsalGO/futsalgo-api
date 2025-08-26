@@ -39,7 +39,7 @@ model Booking {
   booking_date   DateTime @db.Date
   start_time     DateTime @db.Time
   end_time       DateTime @db.Time
-  status         String   @default("pending") // pending, confirmed, cancelled, rejected
+  status         String   @default("pending") // pending, confirmed, cancelled, rejected, completed
   created_at     DateTime @default(now())
 
   field Field @relation(fields: [field_id], references: [id])

@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllFields } from "@/controllers/field-controller";
+import { getAllFields } from "@/controllers/fields-controller";
 
 const router = express.Router();
 

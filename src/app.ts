@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(corsMiddleware);
 
 app.use("/auth", authRoutes);
-app.use("/field", fieldRoute);
+app.use("/fields", fieldRoute);
 app.use("/bookings/user", userBookingRoutes);
 
 app.use(errorHandler);

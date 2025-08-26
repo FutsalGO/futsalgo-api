@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import prisma from "@/prisma/client";
 
-// GET /field?order=asc|desc&sortBy=weekday_price|weekend_price
 export async function getAllFields(
   req: Request,
   res: Response,
@@ -32,7 +31,7 @@ export async function getAllFields(
     return res.status(200).json({
       code: 200,
       status: "success",
-      message: "Login successful",
+      message: "GET Fields Success",
       order,
       sortBy,
       count: normalized.length,

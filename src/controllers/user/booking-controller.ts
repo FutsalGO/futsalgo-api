@@ -1,5 +1,9 @@
 import { Request, Response, NextFunction } from "express";
-import { createBooking, deleteBooking, getBookings } from "@/services/user/booking-service";
+import {
+  createBooking,
+  deleteBooking,
+  getBookings,
+} from "@/services/user/booking-service";
 
 export async function handleGet(
   req: Request,
@@ -8,8 +12,8 @@ export async function handleGet(
 ) {
   try {
     const user_id = (req as any).user?.id;
-    const bookings = await getBookings({...req.query, user_id});
-    
+    const bookings = await getBookings({ ...req.query, user_id });
+
     return res.status(200).json({
       code: 200,
       status: "success",
@@ -29,10 +33,10 @@ export async function handleCreate(
 ) {
   try {
     const booking_data = {
-        ...req.body,
-        user_id: (req as any).user?.id,
-        customer_name: (req as any).user?.name,
-        customer_phone: (req as any).user?.phone,
+      ...req.body,
+      user_id: (req as any).user?.id,
+      customer_name: (req as any).user?.name,
+      customer_phone: (req as any).user?.phone,
     };
     const new_booking = await createBooking(booking_data);
 

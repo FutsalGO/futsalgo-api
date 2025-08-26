@@ -5,6 +5,7 @@ import corsMiddleware from "@/middlewares/cors-middleware";
 import { errorHandler } from "@/middlewares/error-handler-middleware";
 import authRoutes from "@/routes/auth-route";
 import fieldRoute from "@/routes/field-route";
+import userBookingRoutes from "@/routes/user/booking-route";
 
 dotenv.config();
 
@@ -17,6 +18,7 @@ app.use(corsMiddleware);
 
 app.use("/auth", authRoutes);
 app.use("/field", fieldRoute);
+app.use("/bookings/user", userBookingRoutes);
 
 app.use(errorHandler);
 

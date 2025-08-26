@@ -3,6 +3,6 @@ import { getAllFields } from "@/controllers/field-controller";
 
 const router = express.Router();
 
-router.get("", getAllFields);
+router.get("/", getAllFields);
 
 export default router;

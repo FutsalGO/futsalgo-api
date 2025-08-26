@@ -1,6 +1,6 @@
 import prisma from '@/prisma/client';
 import { createBookingSchema, updateBookingSchema } from '@/validations/admin/booking-validation';
-import { sendEmail } from '../email-sender-service';
+import { sendEmail } from '@/services/email-sender-service';
 
 interface BookingFilters {
     limit?: number;

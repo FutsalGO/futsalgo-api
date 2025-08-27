@@ -52,6 +52,33 @@ export async function createBooking(data: CreateBookingData) {
     if (error) {
       throw { code: 400, message: error.message };
     }
+    // 1️⃣ Cek user_id apakah masih punya booking aktif (status != completed)
+    const existingUserBooking = await prisma.booking.findFirst({
+      where: {
+        user_id: value.user_id,
+        status: { not: "completed" },
+      },
+    });
+    if (existingUserBooking) {
+      throw {
+        code: 400,
+        message: "User masih memiliki booking aktif, selesaikan dulu",
+      };
+    }
+    // 2️⃣ Hitung jumlah booking pending di field ini
+    const pendingCount = await prisma.booking.count({
+      where: {
+        field_id: value.field_id,
+        status: "pending",
+      },
+    });
+
+    if (pendingCount >= 5) {
+      throw {
+        code: 400,
+        message: "Lapangan sudah penuh (maksimal 5 booking pending)",
+      };
+    }
 
     const newBooking = await prisma.booking.create({
       data: {

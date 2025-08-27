@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import prisma from "@/prisma/client";
+import { getAllFieldsService } from "@/services/fields-service";
 
 export async function getAllFields(
   req: Request,
@@ -11,23 +11,8 @@ export async function getAllFields(
     const sortBy =
       req.query.sortBy === "weekend_price" ? "weekend_price" : "weekday_price";
 
-    const fields = await prisma.field.findMany({
-      orderBy: { [sortBy]: order },
-    });
-
-    // Jika schema pakai Decimal, normalisasi ke number untuk response
-    const normalized = fields.map((f) => ({
-      ...f,
-      weekday_price:
-        typeof (f as any).weekday_price === "object"
-          ? Number((f as any).weekday_price)
-          : (f as any).weekday_price,
-      weekend_price:
-        typeof (f as any).weekend_price === "object"
-          ? Number((f as any).weekend_price)
-          : (f as any).weekend_price,
-    }));
-
+    const normalized = await getAllFieldsService(order, sortBy);
+    
     return res.status(200).json({
       code: 200,
       status: "success",

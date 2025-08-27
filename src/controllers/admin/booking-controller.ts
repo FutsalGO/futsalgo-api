@@ -1,9 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import {
-  createBooking,
-  deleteBooking,
-  getBookings,
-} from "@/services/user/booking-service";
+import { createBooking, deleteBooking, getBookings, updateBooking } from "@/services/admin/booking-service";
 
 export async function handleGet(
   req: Request,
@@ -11,9 +7,8 @@ export async function handleGet(
   next: NextFunction
 ) {
   try {
-    const user_id = (req as any).user?.id;
-    const bookings = await getBookings({ ...req.query, user_id });
-
+    const bookings = await getBookings(req.query);
+    
     return res.status(200).json({
       code: 200,
       status: "success",
@@ -32,13 +27,7 @@ export async function handleCreate(
   next: NextFunction
 ) {
   try {
-    const booking_data = {
-      ...req.body,
-      user_id: (req as any).user?.id,
-      customer_name: (req as any).user?.name,
-      customer_phone: (req as any).user?.phone,
-    };
-    const new_booking = await createBooking(booking_data);
+    const new_booking = await createBooking(req.body);
 
     return res.status(201).json({
       code: 201,
@@ -51,6 +40,28 @@ export async function handleCreate(
     next(error);
   }
 }
+
+export async function handleUpdate(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  try {
+    const booking_id = Number(req.params.id);
+    const new_booking = await updateBooking({...req.body, booking_id});
+
+    return res.status(201).json({
+      code: 201,
+      status: "success",
+      message: "Booking created successfully",
+      data: new_booking,
+    });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+}
+
 
 export async function handleDelete(
   req: Request,

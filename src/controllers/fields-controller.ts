@@ -12,7 +12,7 @@ export async function getAllFields(
       req.query.sortBy === "weekend_price" ? "weekend_price" : "weekday_price";
 
     const normalized = await getAllFieldsService(order, sortBy);
-
+    
     return res.status(200).json({
       code: 200,
       status: "success",

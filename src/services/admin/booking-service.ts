@@ -1,5 +1,6 @@
 import prisma from '@/prisma/client';
 import { createBookingSchema, updateBookingSchema } from '@/validations/admin/booking-validation';
+import { sendEmail } from '@/services/email-sender-service';
 
 interface BookingFilters {
     limit?: number;
@@ -19,7 +20,7 @@ interface CreateBookingData {
 
 interface UpdateBookingData {
     booking_id: number;
-    status: 'pending' | 'confirmed' | 'cancelled' | 'rejected';
+    status: 'pending' | 'confirmed' | 'cancelled' | 'rejected' | 'completed';
 }
 
 export async function getBookings(filters: BookingFilters) {
@@ -76,10 +77,15 @@ export async function updateBooking(data: UpdateBookingData) {
 
         const newBooking = await prisma.booking.update({
             where: { id: value.booking_id },
+            include: { user: true },
             data: {
                 status: value.status,
             },
         });
+
+        if(newBooking.status === 'confirmed' && newBooking.user) {
+            sendEmail(newBooking);
+        }   
 
         return newBooking;
     } catch (error) {

@@ -67,7 +67,7 @@ export const getSchedules = async () => {
     const day = getDay(date);
     const times: any = {};
 
-    for (let time = 0; time < 24; time++) {
+    for (let time = 8; time < 23; time++) {
       times[time.toString()] = {
         booking_date: date,
         start_time: new Date(date.setHours(time, 0, 0, 0)),

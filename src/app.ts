@@ -5,6 +5,7 @@ import corsMiddleware from "@/middlewares/cors-middleware";
 import { errorHandler } from "@/middlewares/error-handler-middleware";
 import authRoutes from "@/routes/auth-route";
 import fieldRoute from "@/routes/fields-route";
+import scheduleRoutes from "@/routes/schedule-route";
 import userBookingRoutes from "@/routes/user/booking-route";
 import adminBookingRoutes from "@/routes/admin/booking-route";
 
@@ -19,6 +20,7 @@ app.use(corsMiddleware);
 
 app.use("/auth", authRoutes);
 app.use("/fields", fieldRoute);
+app.use('/schedules', scheduleRoutes)
 app.use("/bookings/user", userBookingRoutes);
 app.use("/bookings/admin", adminBookingRoutes);
 

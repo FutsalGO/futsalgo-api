@@ -5,6 +5,7 @@ interface Schedules {
     day: string | undefined;
     times: {
       [key: string]: {
+        field_id: number;
         booking_date: Date;
         start_time: Date;
         end_time: Date;
@@ -14,7 +15,7 @@ interface Schedules {
   }
 }
 
-export const getSchedules = async () => {
+export const getSchedules = async (field_id: number) => {
   const getDate = (date: Date): string => {
     const now = new Date(date);
 
@@ -53,6 +54,7 @@ export const getSchedules = async () => {
   const bookings = await prisma.booking.groupBy({
     by: ['start_time', 'booking_date', 'end_time'],
     where: {
+      field_id,
       booking_date: {
         gte: today,
         lte: next_week,
@@ -69,6 +71,7 @@ export const getSchedules = async () => {
 
     for (let time = 8; time < 23; time++) {
       times[time.toString()] = {
+        field_id,
         booking_date: date,
         start_time: new Date(date.setHours(time, 0, 0, 0)),
         end_time: new Date(date.setHours(time + 1, 0, 0, 0)),

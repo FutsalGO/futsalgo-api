@@ -11,10 +11,10 @@ export async function handleLogin(
     const { token, user } = await loginUser(req.body);
 
     res.cookie("auth_token", token, {
-      httpOnly: true, // agar tidak bisa diakses via JS (XSS protection)
-      secure: process.env.NODE_ENV === "production", // hanya dikirim via HTTPS di production
-      sameSite: "strict", // proteksi CSRF
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 hari
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -48,12 +48,11 @@ export async function handleRegister(
     const { name, phone, email, password } = value;
     const { user, token } = await registerUser(name, phone, email, password);
 
-    // ✅ Simpan token di cookie
     res.cookie("auth_token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 hari
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     return res.status(201).json({
@@ -80,7 +79,6 @@ export async function handleLogout(
   next: NextFunction
 ) {
   try {
-    // Hapus cookie auth_token
     res.clearCookie("auth_token", {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",

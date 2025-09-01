@@ -6,6 +6,6 @@ const router = express.Router();
 
 router.use(requireAuth);
 
-router.get("/", handleGetSchedules);
+router.get("/:field_id", handleGetSchedules);
 
 export default router;

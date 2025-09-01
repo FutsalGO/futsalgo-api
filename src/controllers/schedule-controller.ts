@@ -1,5 +1,5 @@
-import { getSchedules } from "@/services/schedule-service";
 import { NextFunction, Request, Response } from "express";
+import { getSchedules } from "@/services/schedule-service";
 
 export async function handleGetSchedules(
   req: Request,
@@ -7,7 +7,8 @@ export async function handleGetSchedules(
   next: NextFunction
 ) {
   try {
-    const schedules = await getSchedules();
+    const field_id = Number(req.params.field_id);
+    const schedules = await getSchedules(field_id);
 
     return res.status(200).json({
       code: 200,

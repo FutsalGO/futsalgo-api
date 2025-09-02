@@ -23,8 +23,8 @@ model Field {
   id            Int       @id @default(autoincrement())
   name          String
   description   String?
-  weekday_price Decimal
-  weekend_price Decimal
+  weekday_price Int
+  weekend_price Int?
   imageUrl      String?
   created_at    DateTime  @default(now())
   bookings      Booking[]

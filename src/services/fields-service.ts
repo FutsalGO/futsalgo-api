@@ -1,12 +1,11 @@
 import prisma from "@/prisma/client";
 
 // Service untuk ambil semua fields
-export async function getAllFieldsService(
-  order: "asc" | "desc",
-  sortBy: "weekday_price" | "weekend_price"
-) {
+export async function getAllFieldsService() {
   const fields = await prisma.field.findMany({
-    orderBy: { [sortBy]: order },
+    orderBy: {
+      created_at: "desc",
+    },
   });
 
   // Normalisasi Decimal ke number

@@ -75,7 +75,7 @@ export async function createBooking(data: CreateBookingData) {
           data: { status: "cancelled" },
         });
       }
-    }, 10 * 6 * 1000);
+    }, 10 * 60 * 1000);
 
     return newBooking;
   } catch (error) {

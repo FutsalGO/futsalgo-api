@@ -1,9 +1,10 @@
 import prisma from "@/prisma/client";
+
 export const createField = async (data: {
   name: string;
   description?: string | null;
   weekday_price: number;
-  weekend_price?: number | null; // ⬅️ perbaiki ini
+  weekend_price: number; // ⬅️ perbaiki ini
   imageUrl?: string | null;
 }) => {
   return await prisma.field.create({
@@ -11,7 +12,7 @@ export const createField = async (data: {
       name: data.name,
       description: data.description ?? null,
       weekday_price: data.weekday_price,
-      weekend_price: data.weekend_price ?? null,
+      weekend_price: data.weekend_price,
       imageUrl: data.imageUrl ?? null,
     },
   });
@@ -23,7 +24,7 @@ export const updateField = async (
     name?: string;
     description?: string | null;
     weekday_price?: number;
-    weekend_price?: number | null;
+    weekend_price?: number;
     imageUrl?: string | null;
   }
 ) => {

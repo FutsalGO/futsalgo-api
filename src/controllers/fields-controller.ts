@@ -16,7 +16,7 @@ export const HandleCreateField = async (req: Request, res: Response) => {
       name,
       description,
       weekday_price: Number(weekday_price), // pastikan number
-      weekend_price: weekend_price ? Number(weekend_price) : null,
+      weekend_price: Number(weekend_price),
       imageUrl: imagePath,
     });
 
@@ -85,7 +85,6 @@ export async function getAllFields(
       data: normalized,
     });
   } catch (error) {
-
     console.error(error);
     next(error);
   }

@@ -65,6 +65,17 @@ export async function createBooking(data: CreateBookingData) {
         status: "pending",
       },
     });
+    setTimeout(async () => {
+      const booking = await prisma.booking.findUnique({
+        where: { id: newBooking.id },
+      });
+      if (booking && booking.status === "pending") {
+        await prisma.booking.update({
+          where: { id: newBooking.id },
+          data: { status: "cancelled" },
+        });
+      }
+    }, 10 * 6 * 1000);
 
     return newBooking;
   } catch (error) {

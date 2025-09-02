@@ -18,4 +18,8 @@ router.post("/add", uploadField.single("imageUrl"), HandleCreateField);
 router.put("/:id", uploadField.single("imageUrl"), HandleUpdateField);
 router.delete("/del/:id", HandleDeleteField);
 
+const router = express.Router();
+
+router.get("/", getAllFields);
+
 export default router;

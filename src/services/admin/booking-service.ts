@@ -1,6 +1,6 @@
 import prisma from '@/prisma/client';
 import { createBookingSchema, updateBookingSchema } from '@/validations/admin/booking-validation';
-import { sendEmail } from '@/services/email-sender-service';
+import { sendConfirmedEmail } from '@/utils/email-sender';
 
 interface BookingFilters {
     limit?: number;
@@ -26,6 +26,7 @@ interface UpdateBookingData {
 export async function getBookings(filters: BookingFilters) {
     try {
         const bookings = await prisma.booking.findMany({
+            include: { field: true },
             where: {
                 ...(filters.date ? { booking_date: new Date(filters.date).toISOString() } : {}),
                 ...(filters.status ? { status: filters.status } : {}),
@@ -58,7 +59,7 @@ export async function createBooking(data: CreateBookingData) {
                 booking_date: new Date(value.booking_date).toISOString(),
                 start_time: new Date(`1970-01-01T${value.start_time}Z`).toISOString(),
                 end_time: new Date(`1970-01-01T${value.end_time}Z`).toISOString(),
-                status: 'pending',
+                status: 'confirmed',
             },
         });
 
@@ -84,7 +85,7 @@ export async function updateBooking(data: UpdateBookingData) {
         });
 
         if(newBooking.status === 'confirmed' && newBooking.user) {
-            sendEmail(newBooking);
+            sendConfirmedEmail(newBooking);
         }   
 
         return newBooking;

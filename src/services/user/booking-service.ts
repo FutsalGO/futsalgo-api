@@ -1,6 +1,6 @@
 import prisma from "@/prisma/client";
+import { sendPendingEmail } from "@/utils/email-sender";
 import { createBookingSchema } from "@/validations/user/booking-validation";
-import { create } from "domain";
 
 interface BookingFilters {
   user_id: number;
@@ -54,6 +54,7 @@ export async function createBooking(data: CreateBookingData) {
     }
 
     const newBooking = await prisma.booking.create({
+      include: { user: true },
       data: {
         user_id: value.user_id,
         field_id: value.field_id,
@@ -65,6 +66,9 @@ export async function createBooking(data: CreateBookingData) {
         status: "pending",
       },
     });
+
+    sendPendingEmail(newBooking);
+
     setTimeout(async () => {
       const booking = await prisma.booking.findUnique({
         where: { id: newBooking.id },

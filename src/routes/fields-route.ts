@@ -11,7 +11,7 @@ import { requireAdmin } from "@/middlewares/admin-middleware";
 
 const router = express.Router();
 
-router.use(requireAuth, requireAdmin);
+router.use(requireAuth);
 
 router.get("/", getAllFields);
 router.post("/add", uploadField.single("imageUrl"), HandleCreateField);

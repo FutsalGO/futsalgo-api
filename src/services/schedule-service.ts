@@ -89,7 +89,7 @@ export const getSchedules = async (field_id: number) => {
 
   for (const booking of bookings) {
     const date = getDate(booking.booking_date);
-    const time = getTime(booking.start_time) || "";
+    const time = Number(getTime(booking.start_time)) || "";
 
     if (schedules[date] && schedules[date].times[time]) {
       const timeValue = schedules[date].times[time];

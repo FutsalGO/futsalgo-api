@@ -60,10 +60,13 @@ export async function handleRegister(
       status: "success",
       message: "User registered successfully",
       data: {
-        id: user.id,
-        name: user.name,
-        phone: user.phone,
-        email: user.email,
+        user: {
+          id: user.id,
+          name: user.name,
+          phone: user.phone,
+          email: user.email,
+          role: user.role,
+        },
         token,
       },
     });

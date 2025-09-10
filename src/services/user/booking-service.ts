@@ -23,6 +23,7 @@ interface CreateBookingData {
 export async function getBookings(filters: BookingFilters) {
   try {
     const bookings = await prisma.booking.findMany({
+      include: { field: true },
       where: {
         user_id: filters.user_id,
         ...(filters.date
